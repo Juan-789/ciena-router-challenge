@@ -30,8 +30,15 @@ def main():
     history = []
     t = 0
 
+    #opens file or creates file if it doesn't exist
+    try:
+        with open(file_path, 'r'):
+                pass
+    except FileNotFoundError:
+        create_hardware_file(file_path)
 
     while t < 60:
+        #reads hardware satte
         state_values, control_values, signal_values = read_hardware_state(file_path)
         t += 1
         if t%10 == 0:
@@ -46,10 +53,36 @@ def main():
                 mutate_hardware(file_path, signal_values[0], signal_values[1])
             pass
 
+        #print the values
+        print(f"state_values = {state_values}, control_values = {control_values}, signal_values = {signal_values}")
+        
+        #checks input
+        if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+            process_cli_input(file_path, history, t)
+        
+
+        if t%10 == 0:
+            #tempoary values for index 1 and 2
+            temp_for_index_1 = state_values[0]
+            temp_for_index_2 = state_values[1]
+
+            #swaps values at index_1 and index_2
+            mutate_database(file_path, 0, temp_for_index_2)
+            mutate_database(file_path, 1, temp_for_index_1)
+
+            #stores the swap commands in history
+            history.append(f"{t} swap {temp_for_index_1} {temp_for_index_2}")
+
+
+
+        
+
+       
+
         # Write Your Code Here End
 
-        time.sleep(1)  # Wait for 1 second before polling again
-    print(history)
+        time.sleep(1)  # Wait for 1 second 
 
+    print_cli_history(history)
 if __name__ == '__main__':
     main()
