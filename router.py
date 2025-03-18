@@ -25,7 +25,6 @@ def process_cli_input(file_path, history, t):
     except Exception as e:
         print(f"Invalid Input - Error: {str(e)}")
 
-    
 
 def main():
     history = []
@@ -42,8 +41,17 @@ def main():
         #reads hardware satte
         state_values, control_values, signal_values = read_hardware_state(file_path)
         t += 1
+        if t%10 == 0:
+            temp = state_values[0]
+            mutate_hardware[file_path, 0, signal_values[1]]
+            mutate_hardware[file_path, 1, temp]
+            
 
         # Write Your Code Here Start
+        if signal_values:
+            if (signal_values[0]<=3 or signal_values[0]>=0):
+                mutate_hardware(file_path, signal_values[0], signal_values[1])
+            pass
 
         #print the values
         print(f"state_values = {state_values}, control_values = {control_values}, signal_values = {signal_values}")
