@@ -29,6 +29,7 @@ def main():
     history = []
     t = 0
 
+    #opens file or creates file if it doesn't exist
     try:
         with open(file_path, 'r'):
                 pass
@@ -36,13 +37,16 @@ def main():
         create_hardware_file(file_path)
 
     while t < 60:
+        #reads hardware satte
         state_values, control_values, signal_values = read_hardware_state(file_path)
         t += 1
 
         # Write Your Code Here Start
 
+        #print the values
         print(f"state_values = {state_values}, control_values = {control_values}, signal_values = {signal_values}")
         
+        #checks input
         if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
             process_cli_input(file_path, history, t)
         
@@ -51,8 +55,8 @@ def main():
 
         # Write Your Code Here End
 
-        time.sleep(1)  # Wait for 1 second before polling again
-    process_cli_input(history)
+        time.sleep(1)  # Wait for 1 second 
 
+    print_cli_history(history)
 if __name__ == '__main__':
     main()
