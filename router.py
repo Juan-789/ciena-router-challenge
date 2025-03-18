@@ -29,6 +29,11 @@ def main():
     history = []
     t = 0
 
+    try:
+        with open(file_path, 'r'):
+                pass
+    except FileNotFoundError:
+        create_hardware_file(file_path)
 
     while t < 60:
         state_values, control_values, signal_values = read_hardware_state(file_path)
@@ -36,10 +41,18 @@ def main():
 
         # Write Your Code Here Start
 
+        print(f"state_values = {state_values}, control_values = {control_values}, signal_values = {signal_values}")
+        
+        if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+            process_cli_input(file_path, history, t)
+        
+
+       
+
         # Write Your Code Here End
 
         time.sleep(1)  # Wait for 1 second before polling again
-    print(history)
+    process_cli_input(history)
 
 if __name__ == '__main__':
     main()
