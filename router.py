@@ -34,10 +34,21 @@ def main():
     while t < 60:
         state_values, control_values, signal_values = read_hardware_state(file_path)
         t += 1
+        print(f"state_values = {state_values}, control_values = {control_values}, signal_values = {signal_values}")
         if t%10 == 0:
-            temp = state_values[0]
-            mutate_hardware[file_path, 0, signal_values[1]]
-            mutate_hardware[file_path, 1, temp]
+            #tempoary values for index 1 and 2
+            temp_for_index_1 = state_values[0]
+            temp_for_index_2 = state_values[1]
+
+            #swaps values at index_1 and index_2
+            mutate_database(file_path, 0, temp_for_index_2)
+            mutate_database(file_path, 1, temp_for_index_1)
+
+            #stores the swap commands in history
+            history.append(f"{t} swap {temp_for_index_1} {temp_for_index_2}")
+
+            
+            
             
 
         # Write Your Code Here Start
