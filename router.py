@@ -41,7 +41,10 @@ def main():
             
 
         # Write Your Code Here Start
-        
+        if signal_values:
+            if (signal_values[0]<=3 or signal_values[0]>=0):
+                mutate_hardware(file_path, signal_values[0], signal_values[1])
+            pass
 
         # Write Your Code Here End
 
