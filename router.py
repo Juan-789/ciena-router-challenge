@@ -44,10 +44,10 @@ def main():
     cli_thread.start()
 
     while t < 60:
-        #reads hardware satte
+        #reads hardware state
         state_values, control_values, signal_values = read_hardware_state(file_path)
         t += 1
-        if t%10 == 0:
+        if t%10 == 0:   #every 10 iterations swap a and b of state
             #tempoary values for index 1 and 2
             temp_for_index_1 = state_values[0]
             temp_for_index_2 = state_values[1]
@@ -60,7 +60,7 @@ def main():
             history.append(f"{t} swap {temp_for_index_1} {temp_for_index_2}")
 
         # Write Your Code Here Start
-        if signal_values:
+        if signal_values:   #valid signal value is put on control 
             if (signal_values[0]<=3 and signal_values[0]>=0):
                 mutate_hardware(file_path, signal_values[0], signal_values[1])
             pass
